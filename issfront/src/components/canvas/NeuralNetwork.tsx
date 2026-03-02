@@ -5,7 +5,7 @@ import * as THREE from 'three'
 
 export function NeuralNetwork() {
     const groupRef = useRef<THREE.Group>(null)
-    const linesRef = useRef<THREE.LineSegments[]>([])
+    const linesRef = useRef<THREE.Line[]>([])
 
     useFrame((state) => {
         if (groupRef.current) {
@@ -135,3 +135,4 @@ export function NeuralNetwork() {
         </group>
     )
 }
+

@@ -88,7 +88,7 @@ interface PortalPlaneProps {
 }
 
 function PortalPlane({ intensity }: PortalPlaneProps) {
-    const materialRef = useRef<any>()
+    const materialRef = useRef<any>(null)
 
     useFrame((state, delta) => {
         if (materialRef.current) {
@@ -145,3 +145,4 @@ export default function LoginScene({ intensity = 1 }: LoginSceneProps) {
         </div>
     )
 }
+

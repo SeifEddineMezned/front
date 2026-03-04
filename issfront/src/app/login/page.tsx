@@ -32,7 +32,6 @@ export default function LoginPage() {
     setError(null);
     setMessage(null);
 
-    // Basic guard
     if (!email || !password) {
       setError("Please enter your email and password.");
       return;
@@ -58,6 +57,10 @@ export default function LoginPage() {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
+          options: {
+            // ✅ IMPORTANT: this controls the redirect_to in the confirmation email
+            emailRedirectTo: "https://xowme.tn/auth/callback",
+          },
         });
 
         if (error) {

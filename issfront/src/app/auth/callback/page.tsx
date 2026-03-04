@@ -3,7 +3,8 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 export default async function AuthCallbackPage() {
-  const cookieStore = cookies();
+  // ✅ cookies() is async in your Next version
+  const cookieStore = await cookies();
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -22,9 +23,9 @@ export default async function AuthCallbackPage() {
     }
   );
 
-  // Exchanges ?code=... for a session + sets auth cookies
+  // Exchange ?code=... for session + set cookies
   await supabase.auth.exchangeCodeForSession();
 
-  // Send user where you want after confirm
+  // Go where you want after confirmation
   redirect("/dashboard");
 }

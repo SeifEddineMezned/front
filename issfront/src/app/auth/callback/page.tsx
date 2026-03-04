@@ -2,8 +2,21 @@ import { redirect } from "next/navigation";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-export default async function AuthCallbackPage() {
-  // ✅ cookies() is async in your Next version
+type Props = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function AuthCallbackPage({ searchParams }: Props) {
+  const params = await searchParams;
+  const codeParam = params.code;
+
+  const code = Array.isArray(codeParam) ? codeParam[0] : codeParam;
+
+  // If no code, send to login
+  if (!code) {
+    redirect("/login");
+  }
+
   const cookieStore = await cookies();
 
   const supabase = createServerClient(
@@ -23,9 +36,12 @@ export default async function AuthCallbackPage() {
     }
   );
 
-  // Exchange ?code=... for session + set cookies
-  await supabase.auth.exchangeCodeForSession();
+  // ✅ Your version expects the code argument
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
 
-  // Go where you want after confirmation
+  if (error) {
+    redirect("/login");
+  }
+
   redirect("/dashboard");
 }
